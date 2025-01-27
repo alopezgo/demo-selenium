@@ -3,7 +3,6 @@
 <suite name="All Test Suite">
     <test name="demo-selenium">
         <parameter name="firstName" value="Ignacia" />
-        <parameter name="browser" value="chrome" />
         <classes>
             <class name="tests.Demo" />
         </classes>
