@@ -180,8 +180,7 @@ public class Home {
             int inputTextEmpty = mandatoryTextFieldsElements.size();
             int selectEmpty = mandatorySelectFieldElements.size();
             int textAreaEmpty = mandatoryTextAreaElements.size();
-            int mandatoryAndEmpty = inputTextEmpty + selectEmpty + textAreaEmpty;
-            return mandatoryAndEmpty;
+            return inputTextEmpty + selectEmpty + textAreaEmpty;
         }catch(Exception e){
             throw e;
         }
