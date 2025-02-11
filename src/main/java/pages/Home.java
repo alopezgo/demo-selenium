@@ -29,24 +29,12 @@ public class Home {
     WebElement contactUsBtn;
     @FindBy(xpath = "//input[contains(@id, 'firstname')]")
     WebElement firstNameInput;
-    @FindBy(xpath = "//input[contains(@id, 'lastname')]")
-    WebElement lastNameInput;
     @FindBy(xpath = "//input[contains(@id, 'email')]")
     WebElement emailInput;
-    @FindBy(xpath = "//input[contains(@id, 'company')]")
-    WebElement companyInput;
-    @FindBy(xpath = "//select[contains(@id, 'contact_type')]")
-    WebElement contactTypeSelect;
-    @FindBy(xpath = "//textarea[contains(@id, 'message')]")
-    WebElement messageArea;
     @FindBy(xpath = "//*[contains(@id, 'newsletter')]")
     WebElement newsletterCheck;
     @FindBy(xpath = "//input[@type='submit']")
     WebElement submitBtn;
-
-    @FindBy(xpath = "//input[contains(@id, 'firstname')]/parent::div/following-sibling::ul/descendant::li")
-    WebElement firstNameMandatoryMessage;
-
 
 
     public boolean validateLoginUrl(String url) {
@@ -111,19 +99,29 @@ public class Home {
         }
     }
 
-    public void clickNewsletterCheckbox(){
+    public boolean clickNewsletterCheckbox(){
         try{
+            boolean flag = false;
             wait.until(ExpectedConditions.visibilityOf(newsletterCheck));
             newsletterCheck.click();
+            if(newsletterCheck.isSelected()){
+                flag = true;
+            }
+            return flag;
 
         }catch(Exception e){
             throw e;
         }
     }
-    public void clickSubmit(){
+    public boolean clickSubmit(){
+        boolean flag = false;
         try{
             wait.until(ExpectedConditions.visibilityOf(submitBtn));
             submitBtn.click();
+            if(!submitBtn.isDisplayed()){
+                flag = true;
+            }
+            return flag;
         }catch(Exception e){
             throw e;
         }
@@ -160,11 +158,15 @@ public class Home {
 
     }
 
-    public void fillFirstName(String firstName){
+    public boolean fillFirstName(String firstName){
+        boolean flag = false;
         try{
             wait.until(ExpectedConditions.visibilityOf(firstNameInput));
             firstNameInput.sendKeys(firstName);
-
+            if(firstNameInput.getText().equals(firstName)){
+                flag = true;
+            }
+            return flag;
         }catch(Exception e){
             throw e;
         }
@@ -186,12 +188,12 @@ public class Home {
 
     }
 
-    public void validateMandatoryFirstNameNotPresent(){
+    public boolean validateMandatoryFirstNameNotPresent(){
         try{
-            wait.until(ExpectedConditions.invisibilityOf(firstNameInput));
+            boolean flag = wait.until(ExpectedConditions.invisibilityOf(firstNameInput));
+            return  flag;
         }catch(Exception e){
         throw e;}
-
     }
 
 }

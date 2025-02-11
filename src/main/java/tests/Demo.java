@@ -20,52 +20,15 @@ public class Demo extends BaseTest {
         assertTrue(home.validateFirstNameInput(), "Error founding First Name Input");
         assertTrue(home.validateEmailInput(), "Error founding Email Input");
         assertTrue(home.validateNewsletterCheckbox(), "Error founding Newsletter Checkbok");
-        try{
-            home.clickNewsletterCheckbox();
-        }
-        catch (Exception e){
-            System.out.println("clickNewsletterCheckbox method failed: " + e.getMessage());
-        };
-        try{
-            home.clickSubmit();
-        }
-        catch (Exception e){
-            System.out.println("clikSubmit method failed: " + e.getMessage());
-        };
+        assertTrue(home.clickNewsletterCheckbox(), "Error checking newsletter checkbox");
+        assertFalse(home.clickSubmit(), "Error submitting contact form when not all mandatary fields are completed");
         assertTrue(home.validateMandatoryFields(), "Error, not all mandatory fields are throwing a mandatory message");
-        try{
-            assertTrue(home.validateColorMessage(ContactUsForm.FIRST_NAME.getIndex()), "Error, is not red or not only one with a red color message");
-        }
-        catch (AssertionError e){
-            System.out.println("Assertion failed: " + e.getMessage());
-        }
-        try{
-           home.fillFirstName(firstName);
-        }
-        catch (AssertionError e){
-            System.out.println("fillFirstName method failed: " + e.getMessage());
-        }
-        try{
-            home.clickNewsletterCheckbox();
-        }
-        catch (Exception e){
-            System.out.println("clickNewsletterCheckbox method failed: " + e.getMessage());
-        };
+        assertTrue(home.validateColorMessage(ContactUsForm.FIRST_NAME.getIndex()), "Error, is not red or not only one with a red color message");
+        assertTrue(home.fillFirstName(firstName), "Error sending keys to fillFirstName");
+        assertFalse(home.clickNewsletterCheckbox(), "Error submitting contact form when not all mandatary fields are completed");
         assertEquals(home.validateMandatoryAndEmptyFields(), 5);
-        try{
-            home.validateMandatoryFirstNameNotPresent();
-        }
-        catch (Exception e){
-            System.out.println("validateMandatoryFirstNameNotPresent method failed: " + e.getMessage());
-        };
-        try{
-            assertTrue(home.validateColorMessage(ContactUsForm.EMAIL.getIndex()), "Error, is not red or not only one with a red color message");
-        }
-        catch (AssertionError e){
-            System.out.println("Assertion failed: " + e.getMessage());
-        }
-
-        Thread.sleep(5);
+        assertTrue(home.validateMandatoryFirstNameNotPresent(), "Error validating mandatory First Name");
+        assertTrue(home.validateColorMessage(ContactUsForm.EMAIL.getIndex()), "Error, is not red or not only one with a red color message");
 
 
     }
