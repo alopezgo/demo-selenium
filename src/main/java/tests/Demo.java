@@ -23,12 +23,12 @@ public class Demo extends BaseTest {
         assertTrue(home.clickNewsletterCheckbox(), "Error checking newsletter checkbox");
         assertFalse(home.clickSubmit(), "Error submitting contact form when not all mandatary fields are completed");
         assertTrue(home.validateMandatoryFields(), "Error, not all mandatory fields are throwing a mandatory message");
-        assertTrue(home.validateColorMessage(ContactUsForm.FIRST_NAME.getIndex()), "Error, is not red or not only one with a red color message");
+        assertFalse(home.validateColorMessage(ContactUsForm.FIRST_NAME.getIndex()), "Error, is not red or not only one with a red color message");
         assertTrue(home.fillFirstName(firstName), "Error sending keys to fillFirstName");
         assertFalse(home.clickNewsletterCheckbox(), "Error submitting contact form when not all mandatary fields are completed");
-        assertEquals(home.validateMandatoryAndEmptyFields(), 5);
+        assertTrue(home.validateMandatoryAndEmptyFields(5), "Error validating mandatoru error quantity in contact form");
         assertTrue(home.validateMandatoryFirstNameNotPresent(), "Error validating mandatory First Name");
-        assertTrue(home.validateColorMessage(ContactUsForm.EMAIL.getIndex()), "Error, is not red or not only one with a red color message");
+        assertFalse(home.validateColorMessage(ContactUsForm.EMAIL.getIndex()), "Error, is not red or not only one with a red color message");
 
 
     }

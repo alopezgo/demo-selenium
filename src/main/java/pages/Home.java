@@ -101,16 +101,16 @@ public class Home {
 
     public boolean clickNewsletterCheckbox(){
         try{
-            boolean flag = false;
             wait.until(ExpectedConditions.visibilityOf(newsletterCheck));
             newsletterCheck.click();
-            if(newsletterCheck.isSelected()){
-                flag = true;
-            }
-            return flag;
+            return wait.until(ExpectedConditions.attributeToBe(
+                    By.xpath("//*[contains(@id, 'newsletter')]/ancestor::span[1]"),
+                    "class",
+                    "checked"));
 
         }catch(Exception e){
-            throw e;
+            System.err.println("Error clicking newsletter checkbox: " + e.getMessage());
+            return false;
         }
     }
     public boolean clickSubmit(){
@@ -159,40 +159,44 @@ public class Home {
     }
 
     public boolean fillFirstName(String firstName){
-        boolean flag = false;
         try{
             wait.until(ExpectedConditions.visibilityOf(firstNameInput));
             firstNameInput.sendKeys(firstName);
-            if(firstNameInput.getText().equals(firstName)){
-                flag = true;
-            }
-            return flag;
-        }catch(Exception e){
-            throw e;
+            return wait.until(ExpectedConditions.attributeToBe(firstNameInput, "value", firstName));
+        } catch (Exception e) {
+            System.err.println("Error sending First Name: " + e.getMessage());
+            return false;
         }
     }
 
-    public int validateMandatoryAndEmptyFields(){
-        try{
+    public boolean validateMandatoryAndEmptyFields(int quantityExpected) {
+        try {
+            wait.until(ExpectedConditions.and(
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@required and @value='']")),
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//select[@class='hs-input invalid error is-placeholder']")),
+                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//textarea[string-length(normalize-space(text())) = 0 and @required]"))
+            ));
+
             List<WebElement> mandatoryTextFieldsElements = driver.findElements(By.xpath("//*[@required and @value='']"));
             List<WebElement> mandatorySelectFieldElements = driver.findElements(By.xpath("//select[@class='hs-input invalid error is-placeholder']"));
-            List<WebElement> mandatoryTextAreaElements = driver.findElements(By.xpath("//textarea[not(@text()) and @required]"));
-            int inputTextEmpty = mandatoryTextFieldsElements.size();
-            int selectEmpty = mandatorySelectFieldElements.size();
-            int textAreaEmpty = mandatoryTextAreaElements.size();
-            return inputTextEmpty + selectEmpty + textAreaEmpty;
-        }catch(Exception e){
-            throw e;
-        }
+            List<WebElement> mandatoryTextAreaElements = driver.findElements(By.xpath("//textarea[string-length(normalize-space(text())) = 0 and @required]"));
 
+            int totalEmptyFields = mandatoryTextFieldsElements.size() + mandatorySelectFieldElements.size() + mandatoryTextAreaElements.size();
+            return totalEmptyFields == quantityExpected;
+
+        } catch (Exception e) {
+            System.err.println("Error validating quantity of empty mandatory fields: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean validateMandatoryFirstNameNotPresent(){
         try{
-            boolean flag = wait.until(ExpectedConditions.invisibilityOf(firstNameInput));
-            return  flag;
-        }catch(Exception e){
-        throw e;}
+            return wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//input[@name = 'firstname']/ancestor-or-self::div[1]/following-sibling::ul/li/label")));
+        } catch (Exception e) {
+            System.err.println("Error validating error message for manadatory field : " + e.getMessage());
+            return false;
+        }
     }
 
 }
